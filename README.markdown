@@ -1,6 +1,6 @@
 ## DWTC-Tools: A Java Library for working with the Dresden Web Table Corpus
 
-This repository contains Java classes to help you get started using the [Dresden Web Table Corpus](http://wwwdb.inf.tu-dresden.de/misc/edyra/dwtc), a collection of roughly 100M data tables extracted from a publicly available web crawl, the [Common Crawl](http://commoncrawl.org).
+This repository contains Java classes to help you get started using the [Dresden Web Table Corpus](http://wwwdb.inf.tu-dresden.de/misc/dwtc), a collection of roughly 100M data tables extracted from a publicly available web crawl, the [Common Crawl](http://commoncrawl.org).
 
 It contains code for:
 
