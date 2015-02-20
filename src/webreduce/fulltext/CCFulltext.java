@@ -45,8 +45,8 @@ public class CCFulltext {
 	}
 
 	public String fullText(Dataset er) throws IOException, ServiceException {
-		long startOffset = er.recordOffset;
-		long endOffset = er.recordEndOffset;
+		long startOffset = er.getRecordOffset();
+		long endOffset = er.getRecordEndOffset();
 		String s3Link = er.s3Link;
 		return fullText(s3Link, startOffset, endOffset);
 	}
@@ -111,8 +111,8 @@ public class CCFulltext {
 
 		GzipReader gzipReader = new GzipReader(inputObject.getDataInputStream());
 		WarcReader warcReader = WarcReaderFactory.getReaderUncompressed();
-		List<Long> offsets = new ArrayList<>();
-		List<Long> endOffsets = new ArrayList<>();
+		List<Long> offsets = new ArrayList<Long>();
+		List<Long> endOffsets = new ArrayList<Long>();
 		WarcRecord wr = null;
 		String s = "";
 		for (int i = 0; i < 100; i++) {
@@ -164,8 +164,8 @@ public class CCFulltext {
 			ServiceException {
 		InputStream in = new FileInputStream(new File(filePath));
 		WarcReader warcReader = WarcReaderFactory.getReader(in);
-		List<Long> offsets = new ArrayList<>();
-		List<Long> endOffsets = new ArrayList<>();
+		List<Long> offsets = new ArrayList<Long>();
+		List<Long> endOffsets = new ArrayList<Long>();
 		WarcRecord wr = null;
 		String s = "";
 		for (int i = 0; i < 100; i++) {

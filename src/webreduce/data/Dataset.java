@@ -2,38 +2,48 @@ package webreduce.data;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 
-public class Dataset {
+public class Dataset implements Serializable {
 
-	protected static final Gson gson = new Gson();
-	protected static Charset utf8 = Charsets.UTF_8;
+	private static final long serialVersionUID = -3847270241520985456L;
+	
+	protected transient static final Gson gson = new Gson();
+	protected transient static final Charset utf8 = Charsets.UTF_8;
 
-	/* the actual relation extracted, always column oriented*/
+	/* the actual relation extracted, always column oriented */
 	public String[][] relation = null;
-	public String title = ""; // content of a <caption> tag of the table, if it existed, else the <title> tag of the original page
+	public String pageTitle = ""; // the <title> tag of the original page
+	public String title = ""; // content of a <caption> tag of the table, if it
+								// existed
 	public String url = "";
-	public Boolean hasHeader = null; // true if the original HTML had <hr> tags
+	public Boolean hasHeader = null; // true if the original HTML had <th> tags
+	public HeaderPosition headerPosition = null; // position of those th tags
+	public TableType tableType = null; // table classification (entity,
+										// relational, matrix ...)
 
 	// metadata used to identify and locate a table in the CC corpus
-	public int tableNum = -1; // index of the table in the list of tables on the original page
+	public int tableNum = -1; // index of the table in the list of tables on the
+								// original page
 	public String s3Link = ""; // link into S3
 	public long recordEndOffset = -1; // offsets into the CC file
-	@SerializedName("recordOfffset") // the dataset sadly contains a typo ;-)
 	public long recordOffset = -1;
-	public String terms = null; // top-terms extracted from the source page as one whitespace separated string
+	public String[] termSet = null; // top-terms extracted from the source page						
 
-	/* the following attributes are not set in the raw data, but are set by the example preprocessing
-	step of the example indexer (see webreduce.tools.Indexer) */
+	/*
+	 * the following attributes are not set in the raw data, but are set by the
+	 * example preprocessing step of the example indexer (see
+	 * webreduce.tools.Indexer)
+	 */
 	public String[] columnTypes;
-	public String[] termSet;
 	public String[] urlTermSet;
 	public String[] titleTermSet;
-	public String domain; // extracted from the URL using Guava's InternetDomainName class
+	public String domain; // extracted from the URL using Guava's
+							// InternetDomainName class
 
 	public Dataset() {
 	}
@@ -56,14 +66,6 @@ public class Dataset {
 
 	public void setRelation(String[][] relation) {
 		this.relation = relation;
-	}
-
-	public String getTerms() {
-		return terms;
-	}
-
-	public void setTerms(String terms) {
-		this.terms = terms;
 	}
 
 	public String getTitle() {
@@ -114,6 +116,14 @@ public class Dataset {
 		this.recordEndOffset = recordEndOffset;
 	}
 
+	public long getRecordOffset() {
+		return recordOffset;
+	}
+
+	public void setRecordOffset(long recordOffset) {
+		this.recordOffset = recordOffset;
+	}
+
 	public String[] getColumnTypes() {
 		return columnTypes;
 	}
@@ -152,6 +162,30 @@ public class Dataset {
 
 	public void setTitleTermSet(String[] titleTermSet) {
 		this.titleTermSet = titleTermSet;
+	}
+
+	public HeaderPosition getHeaderPosition() {
+		return headerPosition;
+	}
+
+	public void setHeaderPosition(HeaderPosition headerPosition) {
+		this.headerPosition = headerPosition;
+	}
+
+	public String getPageTitle() {
+		return pageTitle;
+	}
+
+	public void setPageTitle(String pageTitle) {
+		this.pageTitle = pageTitle;
+	}
+
+	public TableType getTableType() {
+		return tableType;
+	}
+
+	public void setTableType(TableType tableType) {
+		this.tableType = tableType;
 	}
 
 	public static Dataset fromJson(String json) {

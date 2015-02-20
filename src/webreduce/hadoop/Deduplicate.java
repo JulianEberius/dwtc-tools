@@ -1,8 +1,8 @@
 package webreduce.hadoop;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -44,10 +44,15 @@ public class Deduplicate extends Configured implements Tool {
 		Configuration conf = getConf();
 
 		conf.setBoolean("mapreduce.map.output.compress", true);
+		conf.setBoolean("mapreduce.map.output.compress", true);
 		conf.set("mapreduce.map.failures.maxpercent", "10");
 		conf.set("mapreduce.max.map.failures.percent", "10");
 		conf.set("mapred.max.map.failures.percent", "10");
 		conf.set("mapred.map.failures.maxpercent", "10");
+		
+		conf.setBoolean("mapred.compress.map.output", true);
+		conf.set("mapred.map.output.compression.codec", "org.apache.hadoop.io.compress.SnappyCodec");
+		conf.setBoolean("mapreduce.map.output.compress", true);
 
 		String inputPrefixes = args[0];
 		String outputFile = args[1];
@@ -58,6 +63,7 @@ public class Deduplicate extends Configured implements Tool {
 		FileOutputFormat.setCompressOutput(job, true);
 		FileOutputFormat.setOutputCompressorClass(job,
 				org.apache.hadoop.io.compress.GzipCodec.class);
+		
 		job.setOutputFormatClass(TextOutputFormat.class);
 		job.setMapperClass(DeduplicateMapper.class);
 		job.setReducerClass(DeduplicateReducer.class);
@@ -68,7 +74,10 @@ public class Deduplicate extends Configured implements Tool {
 		job.setJarByClass(Deduplicate.class);
 		job.setNumReduceTasks(500);
 
-		job.submit();
+		System.out.println(Arrays.deepToString(FileInputFormat.getInputPaths(job)));
+
+
+		job.waitForCompletion(true);
 		return 0;
 	}
 
@@ -102,13 +111,12 @@ public class Deduplicate extends Configured implements Tool {
 	public static class DeduplicateReducer extends
 			Reducer<Text, Text, NullWritable, Text> {
 
-		Set<String> cache = null;
 		Text outValue = new Text();
 
 		@Override
 		protected void reduce(Text key, Iterable<Text> values, Context context)
 				throws IOException, InterruptedException {
-			cache = new HashSet<String>();
+			HashSet<String> cache = new HashSet<String>();
 			for (Text t : values) {
 				String oldValue = t.toString();
 				Dataset ds = Dataset.fromJson(oldValue);
@@ -118,8 +126,8 @@ public class Deduplicate extends Configured implements Tool {
 					sb.append(c[1]);
 				}
 				String contentSample = sb.toString();
-				boolean contained = cache.add(contentSample);
-				if (!contained) {
+				boolean newDS = cache.add(contentSample);
+				if (newDS) {
 					outValue.set(oldValue);
 					context.write(NullWritable.get(), outValue);
 				}

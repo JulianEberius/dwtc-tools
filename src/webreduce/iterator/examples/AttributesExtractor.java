@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.lucene.document.Document;
-
 import webreduce.data.Dataset;
 import webreduce.iterator.WebreduceIterator;
 

@@ -1,4 +1,4 @@
-package webreduce.indexing;
+package webreduce.cleaning;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -11,21 +11,18 @@ import org.apache.lucene.analysis.core.StopFilter;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.standard.ClassicFilter;
 import org.apache.lucene.analysis.standard.ClassicTokenizer;
-import org.apache.lucene.util.Version;
 
-/* Just an example custom Lucene analyzer */ 
+/* Just an example custom Lucene analyzer */
 public class CustomAnalyzer extends Analyzer {
 
 	@Override
 	protected TokenStreamComponents createComponents(final String fieldName,
 			final Reader reader) {
-		final ClassicTokenizer src = new ClassicTokenizer(Version.LUCENE_45,
-				reader);
+		final ClassicTokenizer src = new ClassicTokenizer(reader);
 		src.setMaxTokenLength(255);
 		TokenStream filter = new ClassicFilter(src);
-		filter = new LowerCaseFilter(Version.LUCENE_45, filter);
-		filter = new StopFilter(Version.LUCENE_45, filter,
-				StopAnalyzer.ENGLISH_STOP_WORDS_SET);
+		filter = new LowerCaseFilter(filter);
+		filter = new StopFilter(filter, StopAnalyzer.ENGLISH_STOP_WORDS_SET);
 		filter = new ASCIIFoldingFilter(filter);
 		return new TokenStreamComponents(src, filter) {
 			@Override
