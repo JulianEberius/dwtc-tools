@@ -182,6 +182,8 @@ public class Indexer extends WebreduceIterator {
 
 		String title = er.getTitle();
 		if (title == null)
+			title = er.getPageTitle();
+		if (title == null)
 			title = "";
 
 		String attributesStr = sa.toString();

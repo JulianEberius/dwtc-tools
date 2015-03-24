@@ -25,14 +25,15 @@ public class Dataset implements Serializable {
 	public HeaderPosition headerPosition = null; // position of those th tags
 	public TableType tableType = null; // table classification (entity,
 										// relational, matrix ...)
-
+	public String[] termSet = null; // top-terms extracted from the source page
+	
 	// metadata used to identify and locate a table in the CC corpus
 	public int tableNum = -1; // index of the table in the list of tables on the
 								// original page
 	public String s3Link = ""; // link into S3
 	public long recordEndOffset = -1; // offsets into the CC file
 	public long recordOffset = -1;
-	public String[] termSet = null; // top-terms extracted from the source page						
+							
 
 	/*
 	 * the following attributes are not set in the raw data, but are set by the
