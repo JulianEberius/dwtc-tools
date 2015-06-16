@@ -12,7 +12,7 @@ It contains code for:
 - various utilities, e.g., heuristics for typing columns (identifying number columns etc.)
 
 ### Getting Started
-First, visit the [DWTC page](https://wwwdb.inf.tu-dresden.de/edyra/dwtc) to download the corpus (or any subset of it) using the instructions found there. There is no need to decompress the data, both the iterators provided here and Hadoop can work on the compressed data directly.
+First, visit the [DWTC page](https://wwwdb.inf.tu-dresden.de/misc/dwtc) to download the corpus (or any subset of it) using the instructions found there. There is no need to decompress the data, both the iterators provided here and Hadoop can work on the compressed data directly.
 
 The easiest way to build the library is using Maven (or importing into an Maven-compatible IDE):
 
